@@ -33,11 +33,10 @@ if st.session_state.soru_havuzu:
     sorular = st.session_state.soru_havuzu[mevcut_brans]
     toplam_soru = len(sorular)
 
-    # Sol Menü: Doğrudan Soruya Atlama Alanı (Gelişmiş Sayı Girişi)
+    # Sol Menü: İstediğin Soruya Atla
     st.sidebar.write("---")
     st.sidebar.markdown("### 🔍 İstediğin Soruya Atla")
     
-    # Kullanıcı buraya sayı girerek (Örn: 50 yazarak) direkt o soruya zıplayabilir
     hedef_soru = st.sidebar.number_input(
         f"Soru Numarası (1 - {toplam_soru}):", 
         min_value=1, 
@@ -46,36 +45,40 @@ if st.session_state.soru_havuzu:
         step=1
     )
     
-    # Eğer girilen sayı mevcut sorudan farklıysa indexi güncelle
     if hedef_soru - 1 != st.session_state.mevcut_soru_index:
         st.session_state.mevcut_soru_index = hedef_soru - 1
         st.rerun()
 
+    # --- İSTEDİĞİN KISIM: SOL ALT KÖŞEYE İMZA ---
+    st.sidebar.write("---")
+    st.sidebar.markdown(
+        "<div style='position: fixed; bottom: 20px; left: 20px; font-weight: bold; color: #24a0ed; font-size: 16px;'>"
+        "👨‍💻 Mehmet Gökpınar"
+        "</div>", 
+        unsafe_allow_html=True
+    )
+    # --------------------------------------------
+
     # Ana Soru Ekranı
     if st.session_state.mevcut_soru_index < toplam_soru:
-        soru_data = shortages = sorular[st.session_state.mevcut_soru_index]
+        soru_data = sorular[st.session_state.mevcut_soru_index]
         
         st.info(f"**Branş:** {mevcut_brans} | **Soru:** {st.session_state.mevcut_soru_index + 1} / {toplam_soru}")
         st.subheader(soru_data["soru"])
         
-        # KESİN ÇÖZÜM: Form Yapısı Kullanıyoruz. Form içindeki elemanlar asla kilitlenmeye yol açmaz.
+        # Form Yapısı Yapay Kilitlenmeleri Engeller
         with st.form(key=f"form_soru_{mevcut_brans}_{st.session_state.mevcut_soru_index}"):
             
-            # Şık Seçimi
             secim = st.radio("Cevabınızı seçin:", soru_data["secenekler"])
-            
-            # Formu Onaylama ve İlerleme Butonu
             submit_button = st.form_submit_button(label="Cevabı Onayla ve Sonraki Soruya Geç ➔", type="primary", use_container_width=True)
             
             if submit_button:
                 dogru_cevap = soru_data["cevap"].strip()
-                # Önce ekrana sonucu basıyoruz
                 if secim.strip() == dogru_cevap:
                     st.success("🎉 Doğru Cevap!")
                 else:
                     st.error(f"❌ Yanlış Cevap! Doğru Şık: {dogru_cevap}")
                 
-                # Hafızada bir sonraki soruya geçiş komutu veriyoruz
                 st.session_state.mevcut_soru_index += 1
                 st.rerun()
                 
@@ -85,9 +88,9 @@ if st.session_state.soru_havuzu:
             if st.button("🡨 Önceki Soruya Dön", use_container_width=True):
                 st.session_state.mevcut_soru_index -= 1
                 st.rerun()
-    else:
-        st.balloons()
-        st.success("🎉 Tebrikler! Bu branştaki tüm soruları başarıyla tamamladınız.")
-        if st.button("Branşı Yeniden Başlat 🗘", use_container_width=True):
-            st.session_state.mevcut_soru_index = 0
-            st.rerun()
+else:
+    st.balloons()
+    st.success("🎉 Tebrikler! Bu branştaki tüm soruları başarıyla tamamladınız.")
+    if st.button("Branşı Yeniden Başlat 🗘", use_container_width=True):
+        st.session_state.mevcut_soru_index = 0
+        st.rerun()
