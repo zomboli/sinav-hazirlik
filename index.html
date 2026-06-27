@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İmtihan Hazırlık Paneli</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SOL MENÜ -->
+        <div class="sidebar">
+            <h2 class="sidebar-title">Dersler</h2>
+            
+            <!-- HIZLI SORUYA GİT KUTUSU -->
+            <div class="hizli-git-kutusu">
+                <input type="number" id="soru-ara-input" placeholder="Soru no yazıp Enter'a bas..." min="1">
+            </div>
+
+            <!-- Azerbaycan Dili Sekmesi -->
+            <div class="ders-grubu">
+                <button class="menu-btn active" onclick="sekmeDegistir('azerbaycan dili')">Azerbaycan Dili</button>
+                <div id="nav-azerbaycan-dili" class="soru-nav-alani"></div>
+            </div>
+
+            <!-- Fizik Sekmesi -->
+            <div class="ders-grubu">
+                <button class="menu-btn" onclick="sekmeDegistir('fizik')">Fizik</button>
+                <div id="nav-fizik" class="soru-nav-alani" style="display: none;"></div>
+            </div>
+
+            <!-- Kimya Sekmesi -->
+            <div class="ders-grubu">
+                <button class="menu-btn" onclick="sekmeDegistir('kimya')">Kimya</button>
+                <div id="nav-kimya" class="soru-nav-alani" style="display: none;"></div>
+            </div>
+
+            <!-- Biyoloji Sekmesi -->
+            <div class="ders-grubu">
+                <button class="menu-btn" onclick="sekmeDegistir('biyoloji')">Biyoloji</button>
+                <div id="nav-biyoloji" class="soru-nav-alani" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- SAĞ ALAN -->
+        <div class="main-content">
+            <div class="quiz-box">
+                <div class="quiz-header">
+                    <span id="aktif-ders-adi">Azerbaycan Dili</span>
+                    <span id="soru-sayaci">Soru: 1 / 0</span>
+                </div>
+                
+                <div id="soru-metni" class="question">
+                    Soru yükleniyor...
+                </div>
+                
+                <div id="secenekler-alani" class="options-container">
+                    <!-- Şıklar dinamik gelecek -->
+                </div>
+
+                <button id="sonraki-btn" class="next-btn" style="display: none;">Sonraki Soru</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
