@@ -18,7 +18,7 @@ if "soru_havuzu" not in st.session_state:
 if "mevcut_soru_index" not in st.session_state:
     st.session_state.mevcut_soru_index = 0
 if "cevap_durumu" not in st.session_state:
-    st.session_state.cevap_durumu = None # None, "dogru", "yanlis"
+    st.session_state.cevap_durumu = None 
 
 # Başlık
 st.markdown("<h1 style='text-align: center; color: #24a0ed;'>Sınav Hazırlık Platformu</h1>", unsafe_allow_html=True)
@@ -54,14 +54,16 @@ if st.session_state.soru_havuzu:
         st.session_state.cevap_durumu = None
         st.rerun()
 
-    # Sol Alt Köşeye İmza
+    # --- YENİ EKLENEN KISIM: BÜYÜTÜLMÜŞ VE INSTAGRAM LİNKLİ İMZA ---
     st.sidebar.write("---")
+    instagram_url = "https://www.instagram.com/mehmet.akif_gokpinar"
     st.sidebar.markdown(
-        "<div style='position: fixed; bottom: 20px; left: 20px; font-weight: bold; color: #24a0ed; font-size: 16px;'>"
-        "👨‍💻 Mehmet Gökpınar"
-        "</div>", 
+        f"<div style='position: fixed; bottom: 20px; left: 20px; font-weight: bold; font-size: 20px; z-index: 999;'>"
+        f"👨‍💻 <a href='{instagram_url}' target='_blank' style='text-decoration: none; color: #24a0ed;'>Mehmet Gökpınar</a>"
+        f"</div>", 
         unsafe_allow_html=True
     )
+    # -------------------------------------------------------------
 
     # Ana Soru Ekranı
     if st.session_state.mevcut_soru_index < toplam_soru:
@@ -70,7 +72,6 @@ if st.session_state.soru_havuzu:
         st.info(f"**Branş:** {mevcut_brans} | **Soru:** {st.session_state.mevcut_soru_index + 1} / {toplam_soru}")
         st.subheader(soru_data["soru"])
         
-        # Şık Seçim Alanı (Eğer cevaplandıysa kilitlenir)
         kilitli_mi = st.session_state.cevap_durumu is not None
         secim = st.radio(
             "Cevabınızı seçin:", 
@@ -81,11 +82,9 @@ if st.session_state.soru_havuzu:
         
         st.write("---")
         
-        # Ekranda Kontrol Butonu Gösterimi
         if st.session_state.cevap_durumu is None:
             if st.button("Cevabı Onayla ✔️", type="primary", use_container_width=True):
                 dogru_cevap = soru_data["cevap"].strip()
-                
                 if secim.strip() == dogru_cevap:
                     st.session_state.cevap_durumu = "dogru"
                     st.rerun()
@@ -93,7 +92,6 @@ if st.session_state.soru_havuzu:
                     st.session_state.cevap_durumu = "yanlis"
                     st.rerun()
                     
-        # GERİ BİLDİRİM VE İLERLEME MANTIĞI
         if st.session_state.cevap_durumu == "dogru":
             st.success("🎉 Doğru Cevap! 1 saniye sonra sonraki soruya geçiliyor...")
             time.sleep(1)
@@ -103,23 +101,20 @@ if st.session_state.soru_havuzu:
             
         elif st.session_state.cevap_durumu == "yanlis":
             st.error(f"❌ Yanlış Cevap! Doğru Şık: {soru_data['cevap'].strip()}")
-            
-            # Yanlış yapınca buradaki butona basana kadar sayfada kalır
             if st.button("Sonraki Soru ➔", type="primary", use_container_width=True):
                 st.session_state.mevcut_soru_index += 1
                 st.session_state.cevap_durumu = None
                 st.rerun()
                 
-        # Önceki Soruya Dönme Butonu
         if st.session_state.mevcut_soru_index > 0 and st.session_state.cevap_durumu is None:
             if st.button("🡨 Önceki Soruya Dön", use_container_width=True):
                 st.session_state.mevcut_soru_index -= 1
                 st.session_state.cevap_durumu = None
                 st.rerun()
-    else:
-        st.balloons()
-        st.success("🎉 Tebrikler! Bu branştaki tüm soruları başarıyla tamamladınız.")
-        if st.button("Branşı Yeniden Başlat 🗘", use_container_width=True):
-            st.session_state.mevcut_soru_index = 0
-            st.session_state.cevap_durumu = None
-            st.rerun()
+else:
+    st.balloons()
+    st.success("🎉 Tebrikler! Bu branştaki tüm soruları başarıyla tamamladınız.")
+    if st.button("Branşı Yeniden Başlat 🗘", use_container_width=True):
+        st.session_state.mevcut_soru_index = 0
+        st.session_state.cevap_durumu = None
+        st.rerun()
